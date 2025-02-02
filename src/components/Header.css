@@ -1,0 +1,33 @@
+header {
+  position: relative;
+  background-image: url('../assets/imgs/Header.jpg');
+  background-size: cover;
+  background-position: center;
+  color: white;
+  padding: 2rem;
+  text-align: center;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 1;
+}
+
+
+header h1,
+header p {
+  position: relative;
+  z-index: 2;
+}

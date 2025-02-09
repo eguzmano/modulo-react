@@ -1,0 +1,11 @@
+p {
+  font-weight: 700;
+}
+
+form {
+  width: 30%;
+  margin: 0 auto 3rem auto;
+  padding: 30px;
+  border: solid 2px black;
+  border-radius: 10px;
+}

@@ -21,7 +21,6 @@ const CardPizza = ({ name, price, ingredients, img }) => {
           <button className='btn btn-light'>Ver mas 👀</button>
           <button className='btn btn-dark'>Añadir al 🛒</button>
         </div>
-
       </div>
     </div>
   )

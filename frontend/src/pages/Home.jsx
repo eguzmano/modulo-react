@@ -1,6 +1,6 @@
 import './Home.css'
-import CardPizza from './CardPizza'
-import Header from './Header'
+import CardPizza from '../components/CardPizza'
+import Header from '../components/Header'
 import capitalize from '../utils/capitalize'
 import { useEffect, useState } from 'react'
 

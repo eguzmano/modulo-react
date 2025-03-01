@@ -1,16 +1,20 @@
 import formatNumber from '../utils/formatNumber'
 import './Navbar.css'
+import { Link } from 'react-router-dom'
 
 const Navbar = () => {
   const total = 25000
   const token = false
 
   return (
-    <nav className='navbar navbar-expand-lg bg-body-dark'>
-      <div className='container-fluid'>
-        <a className='navbar-brand text-light' href='#'>
+    <nav className='navbar navbar-expand-lg bg-body-dark fixed-top px-5'>
+      <div className='container-fluid px-5'>
+        <Link
+          to='/'
+          className='navbar-brand text-light' href='#'
+        >
           Pizzería Mamma Mia!
-        </a>
+        </Link>
         <button
           className='navbar-toggler'
           type='button'
@@ -25,47 +29,49 @@ const Navbar = () => {
         <div className='collapse navbar-collapse' id='navbarSupportedContent'>
           <ul className='navbar-nav me-auto mb-2 mb-lg-0'>
             <li className='nav-item'>
-              <a
+              <Link
+                to='/'
                 className='btn btn-outline-light'
                 aria-current='page'
-                href='#'
               >
                 🍕 Home
-              </a>
+              </Link>
             </li>
             {token
               ? (
                 <>
                   <li className='nav-item'>
-                    <a className='btn btn-outline-light' href='#'>
+                    <Link to='/profile' className='btn btn-outline-light'>
                       🔓 Profile
-                    </a>
+                    </Link>
                   </li>
                   <li className='nav-item'>
-                    <a className='btn btn-outline-light' href='#'>
+                    <Link className='btn btn-outline-light'>
                       🔒 Logout
-                    </a>
+                    </Link>
                   </li>
                 </>
                 )
               : (
                 <>
                   <li className='nav-item'>
-                    <a className='btn btn-outline-light' href='#'>
+                    <Link to='/login' className='btn btn-outline-light'>
                       🔐 Login
-                    </a>
+                    </Link>
                   </li>
                   <li className='nav-item'>
-                    <a className='btn btn-outline-light' href=''>
+                    <Link to='/register' className='btn btn-outline-light'>
                       🔐 Register
-                    </a>
+                    </Link>
                   </li>
                 </>
                 )}
           </ul>
-          <button className='btn btn-outline-light' type='submit'>
-            🛒 Total: ${formatNumber(total)}
-          </button>
+          <Link to='/cart'>
+            <button className='btn btn-outline-light'>
+              🛒 Total: ${formatNumber(total)}
+            </button>
+          </Link>
         </div>
       </div>
     </nav>

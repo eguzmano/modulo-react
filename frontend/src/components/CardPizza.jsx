@@ -9,7 +9,7 @@ const CardPizza = ({ name, price, ingredients, img }) => {
       <div className='card-body d-flex flex-column'>
         <ul className='list-group list-group-flush'>
           <li className='list-group-item fs-4'>{name}</li>
-          <li className='list-group-item'>
+          <li className='list-group-item mx-auto'>
             <strong className='d-flex'>🍕 Ingredientes: </strong>
             <ul className='ingredients my-3'>
               {ingredients.map(i => (<li key={i}>{capitalize(i)}</li>))}

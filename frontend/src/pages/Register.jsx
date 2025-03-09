@@ -17,8 +17,16 @@ const Register = () => {
       close: true,
       gravity: 'top',
       position: 'right',
+      offset: {
+        x: 5,
+        y: 50
+      },
       style: {
-        background: type === 'error' ? 'linear-gradient(to right,rgb(104, 32, 19),rgb(74, 19, 32))' : 'linear-gradient(to right,rgb(0, 92, 81),rgb(66, 89, 26))'
+        background: '#000', // Fondo negro
+        color: '#fff', // Texto blanco
+        fontWeight: 'bold', // Texto en negrita
+        borderRadius: '5px', // Bordes redondeados
+        padding: '10px'
       }
     }).showToast()
   }

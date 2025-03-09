@@ -2,18 +2,11 @@ import './Home.css'
 import CardPizza from '../components/CardPizza'
 import Header from '../components/Header'
 import capitalize from '../utils/capitalize'
-import { useEffect, useState } from 'react'
+import { useContext } from 'react'
+import { PizzaContext } from '../context/ProductsContext'
 
 const Home = () => {
-  const [pizzas, setPizzas] = useState([])
-
-  const getPizzas = async () => {
-    const res = await fetch('http://localhost:5000/api/pizzas')
-    const data = await res.json()
-    return setPizzas(data)
-  }
-  useEffect(() => { getPizzas() }, [])
-
+  const { pizzas } = useContext(PizzaContext)
   return (
     <>
       <Header />
@@ -23,6 +16,7 @@ const Home = () => {
               pizzas.map(({ name, img, price, ingredients, id }) => (
                 <CardPizza
                   key={id}
+                  id={id}
                   name={capitalize(name)}
                   img={img}
                   price={price}

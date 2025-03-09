@@ -1,16 +1,10 @@
-import { useState, useEffect } from 'react'
 import capitalize from '../utils/capitalize'
 import formatNumber from '../utils/formatNumber'
+import { PizzaContext } from '../context/ProductsContext'
+import { useContext } from 'react'
 
 const Pizza = () => {
-  const [pizza, setPizza] = useState({})
-
-  const getPizza = async () => {
-    const res = await fetch('http://localhost:5000/api/pizzas/p001')
-    const data = await res.json()
-    return setPizza(data)
-  }
-  useEffect(() => { getPizza() }, [])
+  const { pizza } = useContext(PizzaContext)
 
   return (
     <div className='card my-5 mx-auto shadow' style={{ maxWidth: '1200px' }}>

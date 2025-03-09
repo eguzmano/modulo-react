@@ -1,8 +1,11 @@
 import './CardPizza.css'
 import formatNumber from '../utils/formatNumber'
 import capitalize from '../utils/capitalize'
+import { useContext } from 'react'
+import { CartContext } from '../context/CartContext'
 
-const CardPizza = ({ name, price, ingredients, img }) => {
+const CardPizza = ({ name, price, ingredients, img, id }) => {
+  const { addToCart } = useContext(CartContext)
   return (
     <div className='card mx-3 my-3 card-pizza'>
       <img src={img} className='card-img-top' alt={name} />
@@ -19,7 +22,7 @@ const CardPizza = ({ name, price, ingredients, img }) => {
         </ul>
         <div className='buttons'>
           <button className='btn btn-light'>Ver mas 👀</button>
-          <button className='btn btn-dark'>Añadir al 🛒</button>
+          <button className='btn btn-dark' onClick={() => addToCart({ id, name, price, img })}>Añadir al 🛒</button>
         </div>
       </div>
     </div>

@@ -1,29 +1,11 @@
-import { useState } from 'react'
-import { pizzaCart as initialCart } from '../pizzas'
 import formatNumber from '../utils/formatNumber'
 import capitalize from '../utils/capitalize'
 import './Cart.css'
+import { useContext } from 'react'
+import { CartContext } from '../context/CartContext'
 
 const Cart = () => {
-  const [pizzaCart, setPizzaCart] = useState(initialCart)
-
-  // aumentar la cantidad
-  const increaseQuantity = (id) => {
-    setPizzaCart(pizzaCart.map(p =>
-      p.id === id ? { ...p, count: p.count + 1 } : p
-    ))
-  }
-
-  // disminuir la cantidad o eliminar la pizza
-  const decreaseQuantity = (id) => {
-    setPizzaCart(pizzaCart
-      .map(p => p.id === id ? { ...p, count: p.count - 1 } : p)
-      .filter(p => p.count > 0) // Elimina pizzas con cantidad 0
-    )
-  }
-
-  // total del pedido
-  const total = pizzaCart.reduce((acc, p) => acc + p.price * p.count, 0)
+  const { pizzaCart, total, increaseQuantity, decreaseQuantity, removeAll, clearCart } = useContext(CartContext)
 
   return (
     <div className='cart-container'>
@@ -59,6 +41,13 @@ const Cart = () => {
                         >
                           +
                         </button>
+                        <button
+                          type='button'
+                          className='btn btn-dark mx-2'
+                          onClick={() => removeAll(p.id)}
+                        >
+                          Eliminar todo
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -67,7 +56,21 @@ const Cart = () => {
             ))
           )}
       <h4 className='mb-3'><strong>Total: ${formatNumber(total)}</strong></h4>
-      {pizzaCart.length > 0 && <button className='btn btn-dark px-5 align-self-center'>Pagar</button>}
+      {pizzaCart.length > 0 && (
+        <div className='d-flex justify-content-center'>
+          <button
+            className='btn btn-dark px-4 align-self-center'
+            onClick={clearCart}
+          >
+            Vaciar carrito
+          </button>
+          <button
+            className='btn btn-dark px-5 align-self-center'
+          >
+            Pagar
+          </button>
+        </div>
+      )}
     </div>
   )
 }

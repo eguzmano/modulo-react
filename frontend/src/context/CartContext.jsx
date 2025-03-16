@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from 'react'
+import { createContext, useState, useEffect, useMemo } from 'react'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -69,7 +69,7 @@ const CartProvider = ({ children }) => {
     setTotal(0)
   }
 
-  const globalState = {
+  const globalState = useMemo(() => ({
     pizzaCart,
     increaseQuantity,
     decreaseQuantity,
@@ -77,7 +77,7 @@ const CartProvider = ({ children }) => {
     addToCart,
     removeAll,
     clearCart
-  }
+  }), [pizzaCart, total])
 
   return (
     <CartContext.Provider value={globalState}>

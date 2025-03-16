@@ -1,29 +1,45 @@
-import { createContext, useEffect, useState } from 'react'
+import { createContext, useEffect, useMemo, useState } from 'react'
+import { useParams } from 'react-router-dom'
 
 export const PizzaContext = createContext()
 
 const PizzaProvider = ({ children }) => {
   const [pizzas, setPizzas] = useState([])
   const [pizza, setPizza] = useState({})
+  const { id } = useParams()
 
   const fetchPizzas = async () => {
-    const res = await fetch('http://localhost:5000/api/pizzas')
-    const data = await res.json()
-    return setPizzas(data)
+    try {
+      const res = await fetch('http://localhost:5000/api/pizzas')
+      const data = await res.json()
+      setPizzas(data)
+    } catch (error) {
+      console.log('Error fetching pizzas:', error)
+    }
   }
-  useEffect(() => { fetchPizzas() }, [])
 
-  const fetchPizza = async () => {
-    const res = await fetch('http://localhost:5000/api/pizzas/p001')
-    const data = await res.json()
-    return setPizza(data)
+  const fetchPizza = async (pizzaId) => {
+    try {
+      const res = await fetch(`http://localhost:5000/api/pizzas/${pizzaId}`)
+      const data = await res.json()
+      setPizza(data)
+    } catch (error) {
+      console.log('Error fetching pizza:', error)
+    }
   }
-  useEffect(() => { fetchPizza() }, [])
 
-  const globalState = {
+  useEffect(() => {
+    fetchPizzas()
+  }, [])
+
+  useEffect(() => {
+    fetchPizza(id)
+  }, [id])
+
+  const globalState = useMemo(() => ({
     pizzas,
     pizza
-  }
+  }), [pizzas, pizza])
 
   return (
     <PizzaContext.Provider value={globalState}>
@@ -31,4 +47,5 @@ const PizzaProvider = ({ children }) => {
     </PizzaContext.Provider>
   )
 }
+
 export default PizzaProvider

@@ -3,9 +3,11 @@ import capitalize from '../utils/capitalize'
 import './Cart.css'
 import { useContext } from 'react'
 import { CartContext } from '../context/CartContext'
+import { UserContext } from '../context/UserContext'
 
 const Cart = () => {
   const { pizzaCart, total, increaseQuantity, decreaseQuantity, removeAll, clearCart } = useContext(CartContext)
+  const { token } = useContext(UserContext)
 
   return (
     <div className='cart-container'>
@@ -56,21 +58,21 @@ const Cart = () => {
             ))
           )}
       <h4 className='mb-3'><strong>Total: ${formatNumber(total)}</strong></h4>
-      {pizzaCart.length > 0 && (
-        <div className='d-flex justify-content-center'>
-          <button
-            className='btn btn-dark px-4 align-self-center'
-            onClick={clearCart}
-          >
-            Vaciar carrito
-          </button>
-          <button
-            className='btn btn-dark px-5 align-self-center'
-          >
-            Pagar
-          </button>
-        </div>
-      )}
+      <div className='d-flex justify-content-center'>
+        <button
+          className='btn btn-dark px-4 align-self-center'
+          onClick={clearCart}
+          disabled={!token}
+        >
+          Vaciar carrito
+        </button>
+        <button
+          className='btn btn-dark px-5 align-self-center'
+          disabled={!token}
+        >
+          Pagar
+        </button>
+      </div>
     </div>
   )
 }

@@ -3,10 +3,11 @@ import formatNumber from '../utils/formatNumber'
 import './Navbar.css'
 import { Link } from 'react-router-dom'
 import { CartContext } from '../context/CartContext'
+import { UserContext } from '../context/UserContext'
 
 const Navbar = () => {
   const { total } = useContext(CartContext)
-  const token = false
+  const { token, logoutUser } = useContext(UserContext)
 
   return (
     <nav className='navbar navbar-expand-lg bg-body-dark fixed-top px-5'>
@@ -48,7 +49,7 @@ const Navbar = () => {
                     </Link>
                   </li>
                   <li className='nav-item'>
-                    <Link className='btn btn-outline-light'>
+                    <Link className='btn btn-outline-light' onClick={logoutUser}>
                       🔒 Logout
                     </Link>
                   </li>

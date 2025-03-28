@@ -4,10 +4,42 @@ import './Cart.css'
 import { useContext } from 'react'
 import { CartContext } from '../context/CartContext'
 import { UserContext } from '../context/UserContext'
+import axios from 'axios'
+import showToast from '../utils/showToast'
 
 const Cart = () => {
   const { pizzaCart, total, increaseQuantity, decreaseQuantity, removeAll, clearCart } = useContext(CartContext)
   const { token } = useContext(UserContext)
+
+  const handleSubmit = async (e) => {
+    if (e) {
+      e.preventDefault()
+    }
+    try {
+      const headers = {
+        Authorization: `Bearer ${token}`
+      }
+      const resCheckout = await axios.post('http://localhost:5000/api/checkouts', { items: pizzaCart }, { headers })
+      const checkoutData = resCheckout.data
+      console.log('Respuesta del Backend:', checkoutData)
+      console.log('Detalle del pedido:', checkoutData.cart.items)
+
+      showToast('✅ Su pedido se ha procesado con exito', 'success')
+
+      clearCart()
+    } catch (error) {
+      console.error(error)
+      showToast('❌ Error al procesar el pago', 'error')
+    }
+  }
+
+  const pay = () => {
+    if (total > 0) {
+      handleSubmit()
+    } else {
+      showToast('⚠️ El carrito esta vacio', 'error')
+    }
+  }
 
   return (
     <div className='cart-container'>
@@ -58,20 +90,25 @@ const Cart = () => {
             ))
           )}
       <h4 className='mb-3'><strong>Total: ${formatNumber(total)}</strong></h4>
+      {token ? '' : <h5>Para continuar con el pago debes iniciar sesion</h5>}
       <div className='d-flex justify-content-center'>
-        <button
-          className='btn btn-dark px-4 align-self-center'
-          onClick={clearCart}
-          disabled={!token}
-        >
-          Vaciar carrito
-        </button>
-        <button
-          className='btn btn-dark px-5 align-self-center'
-          disabled={!token}
-        >
-          Pagar
-        </button>
+        {(pizzaCart.length !== 0)
+          ? <>
+            <button
+              className='btn btn-dark px-4 align-self-center'
+              onClick={clearCart}
+            >
+              Vaciar carrito
+            </button>
+            <button
+              className='btn btn-dark px-5 align-self-center'
+              onClick={pay}
+              disabled={!token}
+            >
+              Pagar
+            </button>
+          </>
+          : null}
       </div>
     </div>
   )

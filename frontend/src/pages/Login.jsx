@@ -1,34 +1,11 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import './Register.css'
-import Toastify from 'toastify-js'
-import 'toastify-js/src/toastify.css'
+import { UserContext } from '../context/UserContext'
+import showToast from '../utils/showToast'
 
 const Login = () => {
-  const [user, setUser] = useState({
-    email: '',
-    password: ''
-  })
-
-  const showToast = (message, type) => {
-    Toastify({
-      text: message,
-      duration: 3000,
-      close: true,
-      gravity: 'top',
-      position: 'right',
-      offset: {
-        x: 5,
-        y: 50
-      },
-      style: {
-        background: '#000', // Fondo negro
-        color: '#fff', // Texto blanco
-        fontWeight: 'bold', // Texto en negrita
-        borderRadius: '5px', // Bordes redondeados
-        padding: '10px'
-      }
-    }).showToast()
-  }
+  const [user, setUser] = useState({ email: '', password: '' })
+  const { login } = useContext(UserContext)
 
   const handleChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value })
@@ -46,20 +23,27 @@ const Login = () => {
       showToast('🔒 La contraseña debe tener al menos 6 caracteres', 'error')
       return
     }
-    showToast('✅ Inicio de sesion correctamente!', 'success')
+
+    try {
+      await login(email, password)
+    } catch (error) {
+      console.error('Error al iniciar sesión:', error)
+      showToast('❌ Error en el inicio de sesión', 'error')
+    }
+
     setUser({ email: '', password: '' })
   }
 
   return (
     <div className='container mt-4'>
-      <p className='fs-3 fw-bold'>Iniciar sesion</p>
+      <p className='fs-3 fw-bold'>Iniciar sesión</p>
       <form onSubmit={handleSubmit}>
         <div className='mb-3'>
-          <label htmlFor='exampleInputEmail1' className='form-label'>Email</label>
+          <label htmlFor='email' className='form-label'>Email</label>
           <input
             type='email'
             className='form-control'
-            id='exampleInputEmail1'
+            id='email'
             name='email'
             value={user.email}
             onChange={handleChange}
@@ -67,11 +51,11 @@ const Login = () => {
           />
         </div>
         <div className='mb-3'>
-          <label htmlFor='exampleInputPassword1' className='form-label'>Contraseña</label>
+          <label htmlFor='password' className='form-label'>Contraseña</label>
           <input
             type='password'
             className='form-control'
-            id='exampleInputPassword1'
+            id='password'
             name='password'
             value={user.password}
             onChange={handleChange}
@@ -83,11 +67,10 @@ const Login = () => {
           type='submit'
           className='btn btn-dark'
         >
-          Iniciar sesion
+          Iniciar sesión
         </button>
       </form>
     </div>
-
   )
 }
 

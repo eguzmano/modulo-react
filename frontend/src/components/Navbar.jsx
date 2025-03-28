@@ -7,7 +7,7 @@ import { UserContext } from '../context/UserContext'
 
 const Navbar = () => {
   const { total } = useContext(CartContext)
-  const { token, logoutUser } = useContext(UserContext)
+  const { token, logout } = useContext(UserContext)
 
   return (
     <nav className='navbar navbar-expand-lg bg-body-dark fixed-top px-5'>
@@ -49,7 +49,7 @@ const Navbar = () => {
                     </Link>
                   </li>
                   <li className='nav-item'>
-                    <Link className='btn btn-outline-light' onClick={logoutUser}>
+                    <Link className='btn btn-outline-light' onClick={logout}>
                       🔒 Logout
                     </Link>
                   </li>

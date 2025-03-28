@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import './Register.css'
-import Toastify from 'toastify-js'
-import 'toastify-js/src/toastify.css'
+import { UserContext } from '../context/UserContext'
+import showToast from '../utils/showToast'
 
 const Register = () => {
   const [users, setUsers] = useState({
@@ -9,27 +10,8 @@ const Register = () => {
     password: '',
     repeatPassword: ''
   })
-
-  const showToast = (message, type) => {
-    Toastify({
-      text: message,
-      duration: 3000,
-      close: true,
-      gravity: 'top',
-      position: 'right',
-      offset: {
-        x: 5,
-        y: 50
-      },
-      style: {
-        background: '#000', // Fondo negro
-        color: '#fff', // Texto blanco
-        fontWeight: 'bold', // Texto en negrita
-        borderRadius: '5px', // Bordes redondeados
-        padding: '10px'
-      }
-    }).showToast()
-  }
+  const { register } = useContext(UserContext)
+  const navigate = useNavigate()
 
   const handleChange = (e) => {
     setUsers({ ...users, [e.target.name]: e.target.value })
@@ -37,34 +19,44 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-
     const { email, password, repeatPassword } = users
+
+    // Validaciones
     if (!email.trim() || !password.trim() || !repeatPassword.trim()) {
       showToast('⚠️ Todos los campos son obligatorios!', 'error')
       return
     }
     if (password !== repeatPassword) {
       showToast('❌ Las contraseñas no coinciden!', 'error')
-
       return
     }
     if (password.length < 6) {
       showToast('🔒 La contraseña debe tener al menos 6 caracteres', 'error')
       return
     }
-    showToast('✅ Usuario creado correctamente!', 'success')
-    setUsers({ email: '', password: '', repeatPassword: '' })
+
+    try {
+      // Llamar a la función registerUser desde el contexto
+      await register(email, password)
+      showToast('✅ Usuario creado correctamente!', 'success')
+      setUsers({ email: '', password: '', repeatPassword: '' })
+      navigate('/')
+    } catch (error) {
+      const errorMsg = error.response?.data?.message || '❌ Error al registrar usuario'
+      showToast(errorMsg, 'error')
+    }
   }
+
   return (
     <div className='container mt-4'>
       <p className='fs-3 fw-bold'>Registro</p>
       <form onSubmit={handleSubmit}>
         <div className='mb-3'>
-          <label htmlFor='exampleInputEmail1' className='form-label'>Email</label>
+          <label htmlFor='email' className='form-label'>Email</label>
           <input
             type='email'
             className='form-control'
-            id='exampleInputEmail1'
+            id='email'
             name='email'
             value={users.email}
             onChange={handleChange}
@@ -72,11 +64,11 @@ const Register = () => {
           />
         </div>
         <div className='mb-3'>
-          <label htmlFor='exampleInputPassword1' className='form-label'>Contraseña</label>
+          <label htmlFor='password' className='form-label'>Contraseña</label>
           <input
             type='password'
             className='form-control'
-            id='exampleInputPassword1'
+            id='password'
             name='password'
             value={users.password}
             onChange={handleChange}
@@ -84,26 +76,22 @@ const Register = () => {
           />
         </div>
         <div className='mb-5'>
-          <label htmlFor='exampleInputPassword1' className='form-label'>Confirmar Contraseña</label>
+          <label htmlFor='repeatPassword' className='form-label'>Confirmar Contraseña</label>
           <input
             type='password'
             className='form-control'
-            id='exampleInputPassword1'
+            id='repeatPassword'
             name='repeatPassword'
             value={users.repeatPassword}
             onChange={handleChange}
             placeholder='Repite tu Contraseña'
           />
         </div>
-        <button
-          type='submit'
-          className='btn btn-dark'
-        >
+        <button type='submit' className='btn btn-dark'>
           Crear Cuenta
         </button>
       </form>
     </div>
-
   )
 }
 
